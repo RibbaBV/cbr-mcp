@@ -140,17 +140,23 @@ describe('ranglijsten', () => {
 });
 
 describe('gebieden en scholen', () => {
-  test('twaalf provincies, aflopend op examens', async () => {
+  test('twaalf provincies, aflopend op examens, met een link per provincie', async () => {
     const { data } = await server.roep('cijfers_per_gebied');
     assert.equal(data.aantal, 12);
     const n = data.gebieden.map((g) => g.examens);
     assert.deepEqual(n, [...n].sort((a, b) => b - a));
+    for (const g of data.gebieden) {
+      assert.match(g.pagina, /^https:\/\/ribba\.nl\/rijscholen\/[a-z-]+$/);
+    }
   });
 
   test('met een provincie krijg je de steden erbinnen', async () => {
     const { data } = await server.roep('cijfers_per_gebied', { provincie: 'Zeeland' });
     assert.equal(data.niveau, 'stad');
     assert.ok(data.gebieden.some((g) => g.naam === 'Middelburg'));
+    for (const g of data.gebieden) {
+      assert.match(g.pagina, /^https:\/\/ribba\.nl\/rijscholen\/zeeland\/[a-z0-9-]+$/);
+    }
   });
 
   test('de cijfers van één school kloppen met de uitsplitsing', async () => {

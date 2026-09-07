@@ -4,21 +4,42 @@ Een MCP-server met de slagingspercentages en examencijfers van het CBR: per rijs
 
 Het CBR publiceert zijn cijfers per rijschool, als losse momentopname. Wie het andersom wil zien, per examencentrum of per stad, of wie wil weten hoe een cijfer zich over de tijd ontwikkelt, moet dat zelf opbouwen. Dat is precies wat deze server teruggeeft.
 
-Gemaakt door [Ribba](https://ribba.nl).
+Gemaakt en onderhouden door **[Ribba](https://ribba.nl)**, de vergelijker voor rijscholen en gratis theorie in Nederland.
 
 ## Installeren
 
-Voeg de server toe aan je MCP-client. Er is geen sleutel nodig.
+Er is geen account en geen sleutel nodig. Elke client hieronder start de server zelf met `npx`, dus je hoeft niets vooraf te installeren behalve Node 20 of nieuwer.
 
 ### Claude Code
 
 ```bash
-claude mcp add cbr -- npx -y @ribba/cbr-mcp
+claude mcp add --scope user cbr -- npx -y @ribba/cbr-mcp
 ```
 
-### Claude Desktop, Cursor, Windsurf en andere clients
+`--scope user` schrijft hem naar `~/.claude.json`, waarmee hij in al je projecten werkt en ook beschikbaar is in het Code-tabblad van de desktop-app. Laat je `--scope` weg, dan geldt hij alleen in de map waar je op dat moment staat. Wil je hem juist met je team delen, gebruik dan `--scope project`: die schrijft naar `.mcp.json` in de repo, en dat bestand hoort in versiebeheer.
 
-In `claude_desktop_config.json` of het equivalent van je client:
+### Codex
+
+```bash
+codex mcp add cbr -- npx -y @ribba/cbr-mcp
+```
+
+Of met de hand in `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.cbr]
+command = "npx"
+args = ["-y", "@ribba/cbr-mcp"]
+```
+
+De Codex-CLI, de IDE-extensie en de ChatGPT-desktopapp lezen alle drie datzelfde bestand, dus één keer instellen is genoeg. Zet je het in `.codex/config.toml` binnen een project, dan geldt het alleen daar.
+
+### Claude Desktop
+
+De chat-app deelt zijn instellingen niet met Claude Code en heeft een eigen bestand:
+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -30,6 +51,12 @@ In `claude_desktop_config.json` of het equivalent van je client:
   }
 }
 ```
+
+Herstart de app daarna. Heb je hem daar al staan en wil je hem ook in Claude Code, dan neemt `claude mcp add-from-claude-desktop` hem over.
+
+### Cursor, Windsurf en andere clients
+
+Dezelfde JSON als hierboven, in het configuratiebestand van je client.
 
 ## Wat je kunt vragen
 
@@ -101,6 +128,17 @@ node dist/index.js
 ```
 
 De server praat JSON-RPC over stdin en stdout. Handmatig starten is vooral nuttig om de foutuitvoer te zien; normaal doet je MCP-client dit.
+
+## Deze cijfers op het web
+
+Dezelfde gegevens staan als gewone pagina's op **[ribba.nl](https://ribba.nl)**, met grafieken, kaarten en uitleg erbij:
+
+- [Slagingspercentages](https://ribba.nl/slagingspercentages) per rijschool, stad en provincie
+- [Alle CBR-examencentra](https://ribba.nl/examencentra) met adres, parkeerinformatie en ranglijst
+- [Rijscholen vergelijken](https://ribba.nl/rijscholen) op cijfers, prijs en beoordeling
+- [De gids](https://ribba.nl/gids): hoe het examen werkt en wat de cijfers betekenen
+
+Elke rijschool, elk examencentrum en elk gebied in de uitvoer draagt een verwijzing naar de bijbehorende pagina, zodat je een cijfer altijd in zijn context kunt teruglezen.
 
 ## Licentie
 

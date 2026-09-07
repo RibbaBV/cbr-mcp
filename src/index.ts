@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { selecteer, selecteerAlles } from './db.js';
 import { slug, toonNaam } from './tekst.js';
 import { CATEGORIEEN, CODES, categorie } from './categorieen.js';
-import { schoolUrl } from './pagina.js';
+import { provincieSlug, schoolUrl, stadUrl } from './pagina.js';
 import { aantalScholen, centrum, examencentra, MIN_EXAMENS_RANGLIJST } from './centra.js';
 
 const VERSIE = '0.1.0';
@@ -315,6 +315,9 @@ server.registerTool(
         return {
           naam,
           slug: slug(naam),
+          pagina: provincie
+            ? stadUrl(provincie, naam)
+            : `https://ribba.nl/rijscholen/${provincieSlug(naam)}`,
           rijscholen: groep.length,
           rijscholen_met_cijfers: metCijfer.length,
           examens: groep.reduce((t, s) => t + (s.total_exams ?? 0), 0),
