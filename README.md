@@ -58,6 +58,23 @@ Herstart de app daarna. Heb je hem daar al staan en wil je hem ook in Claude Cod
 
 Dezelfde JSON als hierboven, in het configuratiebestand van je client.
 
+## Werkt het?
+
+Vraag je client:
+
+> Wat is het landelijk slagingspercentage voor het autoexamen?
+
+Komt er een antwoord met cijfers, dan staat de server. Zo niet:
+
+- **De server staat er niet bij.** De meeste clients lezen hun instellingen alleen bij het opstarten. Sluit hem helemaal af en start opnieuw.
+- **`npx: command not found` of een foutmelding over de Node-versie.** Je hebt Node 20 of nieuwer nodig. Controleer met `node --version`; installeren kan via [nodejs.org](https://nodejs.org).
+- **De eerste keer duurt even.** `npx` haalt het pakket dan nog op. Daarna start hij meteen.
+- **Het duurt lang, of je krijgt een foutmelding over een verbinding.** Deze server haalt zijn gegevens op bij Ribba, dus hij heeft internet nodig. Zit je achter een bedrijfsproxy of firewall, dan moet die `registry.npmjs.org`, `ribba.nl` en de bijbehorende diensten doorlaten.
+
+- **Nog steeds niets?** Start de server met de hand en kijk wat hij zegt: `npx -y @ribba/cbr-mcp`. Hij wacht dan op invoer, wat betekent dat hij werkt; foutmeldingen komen erbij te staan.
+
+Kom je er niet uit, [open een issue](https://github.com/RibbaBV/cbr-mcp/issues) of mail [team@ribba.nl](mailto:team@ribba.nl).
+
 ## Wat je kunt vragen
 
 - Wat is het landelijk slagingspercentage voor het autoexamen?
@@ -99,15 +116,6 @@ Eén ding om op te letten bij `school_cijfers`: het veld `slagingspercentage_eer
 De cijfers komen uit de openbare CBR-publicatie per rijschool en worden wekelijks opgehaald. De examencentra worden hier opgeteld uit die publicatie: het CBR levert de uitsplitsing per centrum alleen als bijvangst bij een rijschool.
 
 Twee dingen zijn afgeleid en geen CBR-gegeven. De coördinaten van een examencentrum zijn het zwaartepunt van de rijscholen die er examen doen, want het CBR publiceert geen coördinaten; het adres in dezelfde uitvoer is wél het echte pand. En de tijdreeks in `cijfers_over_tijd` begint bij de eerste meting van Ribba, niet bij het begin van de rijschool: het CBR publiceert geen historie.
-
-## Instellingen
-
-De server praat standaard met de publieke leesomgeving van Ribba. Wie een eigen kopie draait, zet twee omgevingsvariabelen:
-
-| Variabele | Standaard |
-| --- | --- |
-| `RIBBA_SUPABASE_URL` | De publieke Ribba-database |
-| `RIBBA_SUPABASE_ANON_KEY` | De publieke leessleutel |
 
 ## Testen
 
